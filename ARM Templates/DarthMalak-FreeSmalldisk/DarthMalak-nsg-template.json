@@ -1,0 +1,49 @@
+{
+	"$schema": "https://schema.management.azure.com/schemas/2019-04-01/deploymentTemplate.json#",
+	"contentVersion": "1.0.0.0",
+	"parameters": {},
+	"variables": {},
+	"resources": [
+		{
+            "name": "DarthMalak-nsg",
+            "type": "Microsoft.Network/networkSecurityGroups",
+            "apiVersion": "2020-05-01",
+            "location": "australiaeast",
+            "properties": {
+                "securityRules": [
+                	{
+			            "value": [
+			                {
+			                    "name": "RDP",
+			                    "properties": {
+			                        "priority": 300,
+			                        "protocol": "TCP",
+			                        "access": "Allow",
+			                        "direction": "Inbound",
+			                        "sourceAddressPrefix": "*",
+			                        "sourcePortRange": "*",
+			                        "destinationAddressPrefix": "*",
+			                        "destinationPortRange": "3389"
+			                    }
+			                },
+			                {
+			                    "name": "HTTPS",
+			                    "properties": {
+			                        "priority": 320,
+			                        "protocol": "TCP",
+			                        "access": "Allow",
+			                        "direction": "Inbound",
+			                        "sourceAddressPrefix": "*",
+			                        "sourcePortRange": "*",
+			                        "destinationAddressPrefix": "*",
+			                        "destinationPortRange": "443"
+			                    }
+			                }
+			            ]
+			        }
+                ]
+            }
+        }
+	],
+	"outputs": {}
+}
