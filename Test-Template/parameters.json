@@ -6,10 +6,10 @@
             "value": "australiaeast"
         },
         "networkInterfaceName": {
-            "value": "darthmalak441"
+            "value": "darthrevan441"
         },
         "networkSecurityGroupName": {
-            "value": "DarthMalak-nsg"
+            "value": "DarthRevan-nsg"
         },
         "networkSecurityGroupRules": {
             "value": [
@@ -45,7 +45,7 @@
             "value": "default"
         },
         "virtualNetworkName": {
-            "value": "DarthMalak-vnet"
+            "value": "DarthRevan-vnet"
         },
         "addressPrefixes": {
             "value": [
@@ -63,7 +63,7 @@
             ]
         },
         "publicIpAddressName": {
-            "value": "DarthMalak-ip"
+            "value": "DarthRevan-ip"
         },
         "publicIpAddressType": {
             "value": "Dynamic"
@@ -72,16 +72,16 @@
             "value": "Detach"
         },
         "virtualMachineName": {
-            "value": "DarthMalak"
+            "value": "DarthRevan"
         },
         "virtualMachineComputerName": {
-            "value": "DarthMalak"
+            "value": "DarthRevan"
         },
         "virtualMachineRG": {
             "value": "StarForge"
         },
         "osDiskType": {
-            "value": "Premium_LRS"
+            "value": "Standard_LRS"
         },
         "osDiskSizeGiB": {
             "value": 64
