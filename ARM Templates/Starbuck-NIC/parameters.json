@@ -29,13 +29,7 @@
         "vnetDeploymentName": {
             "value": "network-interface-associated-virtual-network-20250516132724"
         },
-        "vnetNatGatewaysWithNewPublicIpAddress": {
-            "value": []
-        },
         "vnetNatGatewaysWithoutNewPublicIpAddress": {
-            "value": []
-        },
-        "vnetNatGatewayPublicIpAddressesNewNames": {
             "value": []
         },
         "vnetNetworkSecurityGroupsNew": {
@@ -45,10 +39,10 @@
             "value": {
                 "subnets": [
                     {
-                        "name": "starbuck-subnet",
+                        "name": "viper-subnet",
                         "properties": {
                             "addressPrefixes": [
-                                "172.16.0.0/24"
+                                "172.16.1.0/24"
                             ],
                             "ipamPoolPrefixAllocations": []
                         }
