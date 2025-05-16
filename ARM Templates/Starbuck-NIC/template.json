@@ -1,0 +1,226 @@
+{
+    "$schema": "http://schema.management.azure.com/schemas/2015-01-01/deploymentTemplate.json#",
+    "contentVersion": "1.0.0.0",
+    "parameters": {
+        "networkInterfaceName": {
+            "type": "string"
+        },
+        "location": {
+            "type": "string"
+        },
+        "subnetId": {
+            "type": "string"
+        },
+        "privateIPAllocationMethod": {
+            "type": "string"
+        },
+        "vnetLocation": {
+            "type": "string",
+            "metadata": {
+                "description": "Azure region for the deployment, resource group and resources."
+            },
+            "defaultValue": "australiaeast"
+        },
+        "vnetExtendedLocation": {
+            "type": "object",
+            "defaultValue": {}
+        },
+        "vnetVirtualNetworkName": {
+            "type": "string",
+            "defaultValue": "vnet-starbuck",
+            "metadata": {
+                "description": "Name of the virtual network resource."
+            }
+        },
+        "vnetTagsByResource": {
+            "type": "object",
+            "defaultValue": {},
+            "metadata": {
+                "description": "Optional tags for the resources."
+            }
+        },
+        "vnetProperties": {
+            "type": "object",
+            "defaultValue": {
+                "subnets": [
+                    {
+                        "name": "starbuck-subnet",
+                        "properties": {
+                            "addressPrefixes": [
+                                "172.16.0.0/24"
+                            ],
+                            "ipamPoolPrefixAllocations": []
+                        }
+                    }
+                ],
+                "addressSpace": {
+                    "addressPrefixes": [
+                        "172.16.0.0/16"
+                    ]
+                }
+            }
+        },
+        "vnetNatGatewaysWithNewPublicIpAddress": {
+            "type": "array",
+            "defaultValue": []
+        },
+        "vnetNatGatewaysWithoutNewPublicIpAddress": {
+            "type": "array",
+            "defaultValue": []
+        },
+        "vnetNatGatewayPublicIpAddressesNewNames": {
+            "type": "array",
+            "metadata": {
+                "description": "Array of public ip addresses for NAT Gateways."
+            },
+            "defaultValue": []
+        },
+        "vnetNetworkSecurityGroupsNew": {
+            "type": "array",
+            "metadata": {
+                "description": "Array of NAT Gateway objects for subnets."
+            },
+            "defaultValue": []
+        },
+        "vnetResourceGroupName": {
+            "type": "string",
+            "defaultValue": "Caprica"
+        },
+        "vnetDeploymentName": {
+            "type": "string",
+            "defaultValue": "network-interface-associated-virtual-network-20250516132724"
+        }
+    },
+    "resources": [
+        {
+            "name": "[parameters('networkInterfaceName')]",
+            "type": "Microsoft.Network/networkInterfaces",
+            "apiVersion": "2022-11-01",
+            "location": "[parameters('location')]",
+            "dependsOn": [
+                "[parameters('vnetDeploymentName')]"
+            ],
+            "properties": {
+                "ipConfigurations": [
+                    {
+                        "name": "Ipv4config",
+                        "properties": {
+                            "privateIpAddressVersion": "IPv4",
+                            "privateIPAllocationMethod": "[parameters('privateIPAllocationMethod')]",
+                            "subnet": {
+                                "id": "[parameters('subnetId')]"
+                            }
+                        }
+                    }
+                ]
+            },
+            "tags": {}
+        },
+        {
+            "type": "Microsoft.Resources/deployments",
+            "apiVersion": "2021-04-01",
+            "name": "[parameters('vnetDeploymentName')]",
+            "resourceGroup": "[parameters('vnetResourceGroupName')]",
+            "properties": {
+                "mode": "Incremental",
+                "template": {
+                    "$schema": "https://schema.management.azure.com/schemas/2019-04-01/deploymentTemplate.json#",
+                    "contentVersion": "1.0.0.0",
+                    "resources": [
+                        {
+                            "type": "Microsoft.Network/virtualNetworks",
+                            "apiVersion": "2024-01-01",
+                            "name": "[parameters('vnetVirtualNetworkName')]",
+                            "location": "[parameters('vnetLocation')]",
+                            "extendedLocation": "[if(empty(parameters('vnetExtendedLocation')), json('null'), parameters('vnetExtendedLocation'))]",
+                            "tags": "[if(empty(parameters('vnetTagsByResource')), json('{}'), parameters('vnetTagsByResource'))]",
+                            "properties": "[parameters('vnetProperties')]"
+                        }
+                    ]
+                }
+            },
+            "copy": {
+                "name": "[parameters('vnetDeploymentName')]",
+                "count": 1
+            },
+            "dependsOn": [
+                "natGatewaysWithNewPublicIpAddressCopy",
+                "natGatewaysWithoutNewPublicIpAddressCopy",
+                "networkSecurityGroupsCopy",
+                "natGatewayPublicIpAddressesCopy",
+                "natGatewayPublicIpAddressesCopy"
+            ]
+        },
+        {
+            "condition": "[greater(length(parameters('vnetNatGatewaysWithoutNewPublicIpAddress')), 0)]",
+            "apiVersion": "2019-09-01",
+            "type": "Microsoft.Network/natGateways",
+            "name": "[parameters('vnetNatGatewaysWithoutNewPublicIpAddress')[copyIndex()].name]",
+            "location": "[parameters('vnetLocation')]",
+            "tags": "[variables('vnetNatGatewayTags')]",
+            "sku": "[variables('standardSku')]",
+            "properties": "[parameters('vnetNatGatewaysWithoutNewPublicIpAddress')[copyIndex()].properties]",
+            "copy": {
+                "name": "natGatewaysWithoutNewPublicIpAddressCopy",
+                "count": "[length(parameters('vnetNatGatewaysWithoutNewPublicIpAddress'))]"
+            }
+        },
+        {
+            "condition": "[greater(length(parameters('vnetNatGatewaysWithNewPublicIpAddress')), 0)]",
+            "apiVersion": "2019-09-01",
+            "type": "Microsoft.Network/natGateways",
+            "name": "[parameters('vnetNatGatewaysWithNewPublicIpAddress')[copyIndex()].name]",
+            "location": "[parameters('vnetLocation')]",
+            "tags": "[variables('vnetNatGatewayTags')]",
+            "sku": "[variables('standardSku')]",
+            "properties": "[parameters('vnetNatGatewaysWithNewPublicIpAddress')[copyIndex()].properties]",
+            "dependsOn": [
+                "natGatewayPublicIpAddressesCopy"
+            ],
+            "copy": {
+                "name": "natGatewaysWithNewPublicIpAddressCopy",
+                "count": "[length(parameters('vnetNatGatewaysWithNewPublicIpAddress'))]"
+            }
+        },
+        {
+            "condition": "[greater(length(parameters('vnetNatGatewayPublicIpAddressesNewNames')), 0)]",
+            "type": "Microsoft.Network/publicIpAddresses",
+            "apiVersion": "2022-05-01",
+            "name": "[parameters('vnetNatGatewayPublicIpAddressesNewNames')[copyIndex()]]",
+            "location": "[parameters('vnetLocation')]",
+            "sku": "[variables('standardSku')]",
+            "tags": "[variables('vnetPublicIpAddressesTags')]",
+            "properties": "[variables('vnetStaticAllocation')]",
+            "copy": {
+                "name": "natGatewayPublicIpAddressesCopy",
+                "count": "[length(parameters('vnetNatGatewayPublicIpAddressesNewNames'))]"
+            }
+        },
+        {
+            "condition": "[greater(length(parameters('vnetNetworkSecurityGroupsNew')), 0)]",
+            "apiVersion": "2020-05-01",
+            "type": "Microsoft.Network/networkSecurityGroups",
+            "name": "[parameters('vnetNetworkSecurityGroupsNew')[copyIndex()].name]",
+            "location": "[parameters('vnetLocation')]",
+            "tags": "[if(contains(parameters('vnetTagsByResource'), 'Microsoft.Network/networkSecurityGroups'), parameters('vnetTagsByResource')['Microsoft.Network/networkSecurityGroups'], json('{}'))]",
+            "properties": {},
+            "copy": {
+                "name": "networkSecurityGroupsCopy",
+                "count": "[length(parameters('vnetNetworkSecurityGroupsNew'))]"
+            }
+        }
+    ],
+    "variables": {
+        "standardSku": {
+            "name": "Standard"
+        },
+        "vnetStaticAllocation": {
+            "publicIPAllocationMethod": "Static"
+        },
+        "vnetPremiumTier": {
+            "tier": "Premium"
+        },
+        "vnetPublicIpAddressesTags": "[if(contains(parameters('vnetTagsByResource'), 'Microsoft.Network/publicIpAddresses'), parameters('vnetTagsByResource')['Microsoft.Network/publicIpAddresses'], json('{}'))]",
+        "vnetNatGatewayTags": "[if(contains(parameters('vnetTagsByResource'), 'Microsoft.Network/natGateways'), parameters('vnetTagsByResource')['Microsoft.Network/natGateways'], json('{}'))]"
+    }
+}

@@ -1,0 +1,65 @@
+{
+    "$schema": "https://schema.management.azure.com/schemas/2015-01-01/deploymentParameters.json#",
+    "contentVersion": "1.0.0.0",
+    "parameters": {
+        "networkInterfaceName": {
+            "value": "Starbuck-NIC"
+        },
+        "location": {
+            "value": "australiaeast"
+        },
+        "subnetId": {
+            "value": "/subscriptions/539956e5-5758-4be7-94f0-eebeae6ac67d/resourceGroups/Caprica/providers/Microsoft.Network/virtualNetworks/vnet-starbuck/subnets/starbuck-subnet"
+        },
+        "privateIPAllocationMethod": {
+            "value": "Dynamic"
+        },
+        "vnetLocation": {
+            "value": "australiaeast"
+        },
+        "vnetExtendedLocation": {
+            "value": {}
+        },
+        "vnetVirtualNetworkName": {
+            "value": "vnet-starbuck"
+        },
+        "vnetResourceGroupName": {
+            "value": "Caprica"
+        },
+        "vnetDeploymentName": {
+            "value": "network-interface-associated-virtual-network-20250516132724"
+        },
+        "vnetNatGatewaysWithNewPublicIpAddress": {
+            "value": []
+        },
+        "vnetNatGatewaysWithoutNewPublicIpAddress": {
+            "value": []
+        },
+        "vnetNatGatewayPublicIpAddressesNewNames": {
+            "value": []
+        },
+        "vnetNetworkSecurityGroupsNew": {
+            "value": []
+        },
+        "vnetProperties": {
+            "value": {
+                "subnets": [
+                    {
+                        "name": "starbuck-subnet",
+                        "properties": {
+                            "addressPrefixes": [
+                                "172.16.0.0/24"
+                            ],
+                            "ipamPoolPrefixAllocations": []
+                        }
+                    }
+                ],
+                "addressSpace": {
+                    "addressPrefixes": [
+                        "172.16.0.0/16"
+                    ]
+                }
+            }
+        }
+    }
+}
