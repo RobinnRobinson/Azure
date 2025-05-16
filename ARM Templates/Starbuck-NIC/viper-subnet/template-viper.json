@@ -42,22 +42,43 @@
         "vnetProperties": {
             "type": "object",
             "defaultValue": {
+                "provisioningState": "Succeeded",
+                "resourceGuid": "5a0c83a1-02db-4f6e-a110-93bb1bc22e48",
+                "addressSpace": {
+                    "addressPrefixes": [
+                        "172.16.0.0/16"
+                    ]
+                },
                 "subnets": [
                     {
-                        "name": "viper-subnet",
+                        "name": "starbuck-subnet",
+                        "properties": {
+                            "provisioningState": "Succeeded",
+                            "addressPrefixes": [
+                                "172.16.0.0/24"
+                            ],
+                            "ipConfigurations": [
+                                {
+                                    "id": "/subscriptions/539956e5-5758-4be7-94f0-eebeae6ac67d/resourceGroups/CAPRICA/providers/Microsoft.Network/networkInterfaces/STARBUCK-NIC/ipConfigurations/IPV4CONFIG"
+                                }
+                            ],
+                            "delegations": [],
+                            "privateEndpointNetworkPolicies": "Disabled",
+                            "privateLinkServiceNetworkPolicies": "Enabled"
+                        }
+                    },
+                    {
+                        "name": "raptor-subnet",
                         "properties": {
                             "addressPrefixes": [
-                                "172.16.1.0/24"
+                                "172.16.2.0/24"
                             ],
                             "ipamPoolPrefixAllocations": []
                         }
                     }
                 ],
-                "addressSpace": {
-                    "addressPrefixes": [
-                        "172.16.0.0/16"
-                    ]
-                }
+                "virtualNetworkPeerings": [],
+                "enableDdosProtection": false
             }
         },
         "vnetNatGatewaysWithNewPublicIpAddress": {
@@ -88,7 +109,7 @@
         },
         "vnetDeploymentName": {
             "type": "string",
-            "defaultValue": "network-interface-associated-virtual-network-20250516132724"
+            "defaultValue": "network-interface-associated-virtual-network-20250516185058"
         }
     },
     "resources": [
@@ -143,7 +164,13 @@
                 "name": "[parameters('vnetDeploymentName')]",
                 "count": 1
             },
-            "dependsOn": []
+            "dependsOn": [
+                "natGatewaysWithNewPublicIpAddressCopy",
+                "natGatewaysWithoutNewPublicIpAddressCopy",
+                "networkSecurityGroupsCopy",
+                "natGatewayPublicIpAddressesCopy",
+                "natGatewayPublicIpAddressesCopy"
+            ]
         },
         {
             "condition": "[greater(length(parameters('vnetNatGatewaysWithoutNewPublicIpAddress')), 0)]",
@@ -211,7 +238,10 @@
         "vnetStaticAllocation": {
             "publicIPAllocationMethod": "Static"
         },
+        "vnetPremiumTier": {
+            "tier": "Premium"
+        },
         "vnetPublicIpAddressesTags": "[if(contains(parameters('vnetTagsByResource'), 'Microsoft.Network/publicIpAddresses'), parameters('vnetTagsByResource')['Microsoft.Network/publicIpAddresses'], json('{}'))]",
-        "vnetNatGatewayTags": "[if(contains(parameters('vnetTagsByResource'), 'Microsoft.Network/natGateways'), parameters('vnetTagsByResource')['Microsoft.Network/natGateways'], json('{}'))]"  
+        "vnetNatGatewayTags": "[if(contains(parameters('vnetTagsByResource'), 'Microsoft.Network/natGateways'), parameters('vnetTagsByResource')['Microsoft.Network/natGateways'], json('{}'))]"
     }
 }
