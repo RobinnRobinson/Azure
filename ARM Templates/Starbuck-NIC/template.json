@@ -217,9 +217,6 @@
         "vnetStaticAllocation": {
             "publicIPAllocationMethod": "Static"
         },
-        "vnetPremiumTier": {
-            "tier": "Premium"
-        },
         "vnetPublicIpAddressesTags": "[if(contains(parameters('vnetTagsByResource'), 'Microsoft.Network/publicIpAddresses'), parameters('vnetTagsByResource')['Microsoft.Network/publicIpAddresses'], json('{}'))]",
         "vnetNatGatewayTags": "[if(contains(parameters('vnetTagsByResource'), 'Microsoft.Network/natGateways'), parameters('vnetTagsByResource')['Microsoft.Network/natGateways'], json('{}'))]"
     }
