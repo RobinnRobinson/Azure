@@ -52,23 +52,6 @@
                 },
                 "subnets": [
                     {
-                        "name": "starbuck-subnet",
-                        "properties": {
-                            "provisioningState": "Succeeded",
-                            "addressPrefixes": [
-                                "172.16.0.0/24"
-                            ],
-                            "ipConfigurations": [
-                                {
-                                    "id": "/subscriptions/539956e5-5758-4be7-94f0-eebeae6ac67d/resourceGroups/CAPRICA/providers/Microsoft.Network/networkInterfaces/STARBUCK-NIC/ipConfigurations/IPV4CONFIG"
-                                }
-                            ],
-                            "delegations": [],
-                            "privateEndpointNetworkPolicies": "Disabled",
-                            "privateLinkServiceNetworkPolicies": "Enabled"
-                        }
-                    },
-                    {
                         "name": "raptor-subnet",
                         "properties": {
                             "addressPrefixes": [
