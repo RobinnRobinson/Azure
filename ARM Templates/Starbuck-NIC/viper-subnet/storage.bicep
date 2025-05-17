@@ -5,7 +5,7 @@ param location string = resourceGroup().location
 // The name of the storage account must be between 3 and 24 characters in length
 // minLength and maxLength are used to set the minimum and maximum length of the name
 // these must be put before the parameter name
-@minLength(3)
+@minLength(3) 
 @maxLength(24)
 param name string = 'robinsstorage248'
 
