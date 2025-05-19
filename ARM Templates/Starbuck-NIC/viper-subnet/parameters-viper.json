@@ -1,0 +1,69 @@
+{
+    "$schema": "https://schema.management.azure.com/schemas/2015-01-01/deploymentParameters.json#",
+    "contentVersion": "2.0.0.0",
+    "parameters": {
+        "networkInterfaceName": {
+            "value": "Raptor-NIC"
+        },
+        "location": {
+            "value": "australiaeast"
+        },
+        "subnetId": {
+            "value": "/subscriptions/539956e5-5758-4be7-94f0-eebeae6ac67d/resourceGroups/Caprica/providers/Microsoft.Network/virtualNetworks/vnet-starbuck/subnets/raptor-subnet"
+        },
+        "privateIPAllocationMethod": {
+            "value": "Dynamic"
+        },
+        "vnetLocation": {
+            "value": "australiaeast"
+        },
+        "vnetExtendedLocation": {
+            "value": {}
+        },
+        "vnetVirtualNetworkName": {
+            "value": "vnet-starbuck"
+        },
+        "vnetResourceGroupName": {
+            "value": "Caprica"
+        },
+        "vnetDeploymentName": {
+            "value": "network-interface-associated-virtual-network-20250516185058"
+        },
+        "vnetNatGatewaysWithNewPublicIpAddress": {
+            "value": []
+        },
+        "vnetNatGatewaysWithoutNewPublicIpAddress": {
+            "value": []
+        },
+        "vnetNatGatewayPublicIpAddressesNewNames": {
+            "value": []
+        },
+        "vnetNetworkSecurityGroupsNew": {
+            "value": []
+        },
+        "vnetProperties": {
+            "value": {
+                "provisioningState": "Succeeded",
+                "resourceGuid": "5a0c83a1-02db-4f6e-a110-93bb1bc22e48",
+                "addressSpace": {
+                    "addressPrefixes": [
+                        "172.16.0.0/16"
+                    ]
+                },
+                "subnets": [
+                    {
+                        "name": "raptor-subnet",
+                        "properties": {
+                            "addressPrefixes": [
+                                "172.16.2.0/24"
+                            ],
+                            "ipamPoolPrefixAllocations": []
+                        }
+                    }
+                ],
+                "virtualNetworkPeerings": [],
+                "enableDdosProtection": false
+            }
+        }
+    }
+}
